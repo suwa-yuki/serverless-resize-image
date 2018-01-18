@@ -49,6 +49,16 @@ Resources:
                   description: Original Image URL
                   required: true
                   type: string
+                - name: max_width
+                  in: query
+                  description: Maximum Width
+                  required: true
+                  type: integer
+                - name: max_height
+                  in: query
+                  description: Maximum Height
+                  required: true
+                  type: integer
               responses: {}
               x-amazon-apigateway-integration:
                 httpMethod: POST

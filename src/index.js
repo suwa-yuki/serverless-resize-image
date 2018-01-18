@@ -1,6 +1,7 @@
 'use strict'
 
-const request = require('request');
+const request = require('request')
+const Sharp = require('sharp')
 
 const createResponse = (statusCode, body) => {
   return {
@@ -22,7 +23,13 @@ exports.handler = (event, context, callback) => {
       { method: 'GET', url: url, encoding: null },
       (error, response, body) => {
           if (!error && response.statusCode === 200) {
-            callback(null, createResponse(200, body))
+            Sharp(body)
+              .resize(size.width, size.height)
+              .max()
+              .toBuffer()
+              .then(data => {
+                callback(null, createResponse(200, data))
+              })
           }
       }
   )
