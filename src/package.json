@@ -1,0 +1,11 @@
+{
+  "name": "resize-image",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "suwa.yuki",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}

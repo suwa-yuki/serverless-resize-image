@@ -1,0 +1,58 @@
+Transform: 'AWS::Serverless-2016-10-31'
+
+Parameters:
+
+  Env:
+    Type: String
+    Description: Environment
+    AllowedValues: [prd, stg, itg]
+    ConstraintDescription: must specify prd, stg or itg.
+    Default: itg
+
+Resources:
+  ResizeImageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Timeout: 180
+      CodeUri: ./src
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ResizeImageApi
+            Path: /image
+            Method: GET
+
+  ResizeImageApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Env
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          title: !Sub resize-image-${Env}
+          description: !Sub resize-image-${Env}
+          version: 1.0.0
+        schemes:
+          - https
+        basePath: !Sub /${Env}
+        paths:
+          /image:
+            get:
+              produces:
+                - application/json
+              parameters:
+                - name: url
+                  in: query
+                  description: Original Image URL
+                  required: true
+                  type: string
+              responses: {}
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ResizeImageFunction.Arn}/invocations
+                type: aws_proxy
+
+        x-amazon-apigateway-binary-media-types: ['application/octet-stream', 'image/jpeg', 'image/png', 'image/gif']
