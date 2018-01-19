@@ -49,14 +49,14 @@ Resources:
                   description: Original Image URL
                   required: true
                   type: string
-                - name: max_width
+                - name: width
                   in: query
-                  description: Maximum Width
+                  description: Width
                   required: true
                   type: integer
-                - name: max_height
+                - name: height
                   in: query
-                  description: Maximum Height
+                  description: Height
                   required: true
                   type: integer
               responses: {}

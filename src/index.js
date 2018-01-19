@@ -11,26 +11,44 @@ const createResponse = (statusCode, body) => {
   }
 }
 
+const getExtension = (contentType) => {
+  switch(contentType) {
+    case 'image/png': return 'png'
+    case 'image/gif': return 'gif'
+    default: return 'jpeg'
+  }
+}
+
 exports.handler = (event, context, callback) => {
   const params = event.queryStringParameters
   const url = decodeURIComponent(params.url)
   console.log(`url = ${url}`)
-  const size = {
-    width: params.max_width,
-    height: params.max_height
-  }
+  const resize = params.width != undefined && params.height != undefined
+  console.log(`resize = ${resize}`)
   request(
       { method: 'GET', url: url, encoding: null },
       (error, response, body) => {
-          if (!error && response.statusCode === 200) {
+        if (!error && response.statusCode === 200) {
+          if (resize) {
+            const size = {
+              width: parseInt(params.width, 10),
+              height: parseInt(params.height, 10)
+            }
+            console.log(`size = ${JSON.stringify(size)}`)
+            const ext = getExtension(response.headers['content-type'])
+            console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
               .max()
+              .toFormat(ext)
               .toBuffer()
               .then(data => {
                 callback(null, createResponse(200, data))
               })
+          } else {
+            callback(null, createResponse(200, body))
           }
+        }
       }
   )
 }
