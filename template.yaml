@@ -34,25 +34,25 @@ Resources:
         Api:
           Type: Api
           Properties:
-            RestApiId: !Ref ResizeImageApi
+            RestApiId: !Ref ImageProcessingApi
             Path: /image
             Method: GET
 
-  ResizeImageApi:
+  ImageProcessingApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Env
       DefinitionBody:
         swagger: 2.0
         info:
-          title: !Sub resize-image-${Env}
-          description: !Sub resize-image-${Env}
+          title: !Sub image-processing-api-${Env}
+          description: !Sub image-processing-api-${Env}
           version: 1.0.0
         schemes:
           - https
         basePath: !Sub /${Env}
         paths:
-          /image:
+          /resize:
             get:
               produces:
                 - application/json
@@ -62,12 +62,12 @@ Resources:
                   description: Original Image URL
                   required: true
                   type: string
-                - name: width
+                - name: w
                   in: query
                   description: Width
                   required: true
                   type: integer
-                - name: height
+                - name: h
                   in: query
                   description: Height
                   required: true
@@ -80,16 +80,16 @@ Resources:
         x-amazon-apigateway-binary-media-types: ['application/octet-stream', 'image/jpeg', 'image/png', 'image/gif']
 
   CustomDomainName:
-    Type: AWS::ApiGateway::DomainName
     Condition: IsCustomDomain
+    Type: AWS::ApiGateway::DomainName
     Properties:
       CertificateArn: !Ref CertificateArn
       DomainName: !Ref DomainName
 
   BasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
     Condition: IsCustomDomain
+    Type: AWS::ApiGateway::BasePathMapping
     Properties:
       DomainName: !Ref CustomDomainName
-      RestApiId: !Ref ResizeImageApi
+      RestApiId: !Ref ImageProcessingApi
       Stage: !Ref Env
