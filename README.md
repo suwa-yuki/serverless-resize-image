@@ -1,10 +1,10 @@
-# Resize Image Service using AWS Services
+# Serverless Resize Image Service using AWS Services
 
 This Application using Serverless Application Model (SAM).
 
 ## How To Deploy
 
-### Package
+### 1. Package
 
 ```bash
 $ aws cloudformation package \
@@ -14,7 +14,7 @@ $ aws cloudformation package \
   --profile <your aws profile>
 ```
 
-### Deploy
+### 2-A. Deploy
 
 ```bash
 $ aws cloudformation deploy \
@@ -25,7 +25,7 @@ $ aws cloudformation deploy \
   --profile <your aws profile>
 ```
 
-### Deploy (using Custom Domain)
+### 2-B. Deploy (using Custom Domain)
 
 ```bash
 $ aws cloudformation deploy \
