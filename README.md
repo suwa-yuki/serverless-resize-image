@@ -25,9 +25,26 @@ $ aws cloudformation deploy \
   --profile <your aws profile>
 ```
 
+### Deploy (using Custom Domain)
+
+```bash
+$ aws cloudformation deploy \
+  --template-file output.yaml \
+  --stack-name resize-image \
+  --parameter-overrides Env=prd CustomDomainName=<your domain name> CertificateArn=<your certificate arn>\
+  --capabilities CAPABILITY_IAM \
+  --profile <your aws profile>
+```
+
 ## How To Use
 
-TBD
+```bash
+$ curl \
+  -X GET \
+  -H 'Accept: image/png' \
+  "https://<your api id>.execute-api.<aws region>.amazonaws.com/<stage>/image?url=https%3A%2F%2Foctodex.github.com%2Fimages%2Flabtocat.png&width=100&height=100" \
+  > resized-image.png
+```
 
 ## License
 
