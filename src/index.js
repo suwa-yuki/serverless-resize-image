@@ -3,9 +3,12 @@
 const request = require('request')
 const Sharp = require('sharp')
 
-const createResponse = (statusCode, body) => {
+const createResponse = (statusCode, contentType, body) => {
   return {
     statusCode: statusCode,
+    headers: {
+      "content-type" : contentType
+    },
     isBase64Encoded: true,
     body: new Buffer(body).toString('base64')
   }
@@ -35,7 +38,8 @@ exports.handler = (event, context, callback) => {
               height: parseInt(params.height, 10)
             }
             console.log(`size = ${JSON.stringify(size)}`)
-            const ext = getExtension(response.headers['content-type'])
+            const contentType = response.headers['content-type']
+            const ext = getExtension(contentType)
             console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
@@ -43,10 +47,10 @@ exports.handler = (event, context, callback) => {
               .toFormat(ext)
               .toBuffer()
               .then(data => {
-                callback(null, createResponse(200, data))
+                callback(null, createResponse(200, contentType, data))
               })
           } else {
-            callback(null, createResponse(200, body))
+            callback(null, createResponse(200, contentType, body))
           }
         }
       }
