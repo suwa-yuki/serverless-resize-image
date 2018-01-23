@@ -4,6 +4,8 @@ This Application using Serverless Application Model (SAM).
 
 ## How To Deploy
 
+### A. API Gateway + Lambda Only
+
 ### 1. Package
 
 ```bash
@@ -14,7 +16,7 @@ $ aws cloudformation package \
   --profile <your aws profile>
 ```
 
-### 2-A. Deploy
+### 2. Deploy
 
 ```bash
 $ aws cloudformation deploy \
@@ -25,7 +27,19 @@ $ aws cloudformation deploy \
   --profile <your aws profile>
 ```
 
-### 2-B. Deploy (using Custom Domain)
+### B. With Custom Domain
+
+### 1. Package
+
+```bash
+$ aws cloudformation package \
+  --template-file template-with-domain.yaml \
+  --s3-bucket <your bucket> \
+  --output-template-file output.yaml \
+  --profile <your aws profile>
+```
+
+### 2. Deploy
 
 ```bash
 $ aws cloudformation deploy \

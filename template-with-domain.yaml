@@ -9,6 +9,14 @@ Parameters:
     ConstraintDescription: must specify prd, stg or itg.
     Default: itg
 
+  DomainName:
+    Type: String
+    Description: Custom Domain Name
+
+  CertificateArn:
+    Type: String
+    Description: Certificate Arn
+
 Resources:
   ResizeImageFunction:
     Type: AWS::Serverless::Function
@@ -65,6 +73,19 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ResizeImageFunction.Arn}/invocations
                 type: aws_proxy
         x-amazon-apigateway-binary-media-types: ['application/octet-stream', 'image/jpeg', 'image/png', 'image/gif']
+
+  CustomDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn: !Ref CertificateArn
+      DomainName: !Ref DomainName
+
+  BasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref CustomDomainName
+      RestApiId: !Ref ImageProcessingApi
+      Stage: !Ref Env
 
 Outputs:
   ResizeImageFunction:
