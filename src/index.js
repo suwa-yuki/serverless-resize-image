@@ -43,7 +43,7 @@ exports.handler = (event, context, callback) => {
             console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
-              .max()
+              .withoutEnlargement()
               .toFormat(ext)
               .toBuffer()
               .then(data => {
