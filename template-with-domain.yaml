@@ -67,12 +67,17 @@ Resources:
                   description: Height
                   required: true
                   type: integer
+                - name: t
+                  in: query
+                  description: Content-Type (jpeg, png, gif, webp)
+                  required: true
+                  type: string
               responses: {}
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ResizeImageFunction.Arn}/invocations
                 type: aws_proxy
-        x-amazon-apigateway-binary-media-types: ['application/octet-stream', 'image/jpeg', 'image/png', 'image/gif']
+        x-amazon-apigateway-binary-media-types: ['application/octet-stream', 'image/jpeg', 'image/png', 'image/gif', 'image/webp']
 
   CustomDomainName:
     Type: AWS::ApiGateway::DomainName
