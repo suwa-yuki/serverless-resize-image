@@ -18,6 +18,7 @@ const getExtension = (contentType) => {
   switch(contentType) {
     case 'image/png': return 'png'
     case 'image/gif': return 'gif'
+    case 'image/webp': return 'webp'
     default: return 'jpeg'
   }
 }
@@ -28,6 +29,8 @@ exports.handler = (event, context, callback) => {
   console.log(`url = ${url}`)
   const resize = params.w != undefined && params.h != undefined
   console.log(`resize = ${resize}`)
+  const type = params.t
+  console.log(`type = ${type}`)
   request(
       { method: 'GET', url: url, encoding: null },
       (error, response, body) => {
@@ -39,7 +42,7 @@ exports.handler = (event, context, callback) => {
               height: parseInt(params.h, 10)
             }
             console.log(`size = ${JSON.stringify(size)}`)
-            const ext = getExtension(contentType)
+            const ext = getExtension(type || contentType)
             console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
