@@ -14,6 +14,15 @@ const createResponse = (statusCode, contentType, body) => {
   }
 }
 
+const toContentType = (type) => {
+  switch(type) {
+    case 'png': return 'image/png'
+    case 'gif': return 'image/gif'
+    case 'webp': return 'image/webp'
+    default: return 'image/jpeg'
+  }
+}
+
 const getExtension = (contentType) => {
   switch(contentType) {
     case 'image/png': return 'png'
@@ -35,14 +44,14 @@ exports.handler = (event, context, callback) => {
       { method: 'GET', url: url, encoding: null },
       (error, response, body) => {
         if (!error && response.statusCode === 200) {
-          const contentType = response.headers['content-type']
+          const contentType = type ? toContentType(type) : response.headers['content-type']
           if (resize) {
             const size = {
               width: parseInt(params.w, 10),
               height: parseInt(params.h, 10)
             }
             console.log(`size = ${JSON.stringify(size)}`)
-            const ext = getExtension(type || contentType)
+            const ext = getExtension(contentType)
             console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
