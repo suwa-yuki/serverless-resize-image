@@ -8,7 +8,7 @@ const createResponse = (statusCode, contentType, body) => {
     statusCode: statusCode,
     headers: {
       'content-type': contentType,
-      'cache-control': 'max-age: 86400'
+      'cache-control': 'max-age=31536000'
     },
     isBase64Encoded: true,
     body: new Buffer(body).toString('base64')
