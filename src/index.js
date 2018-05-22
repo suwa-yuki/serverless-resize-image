@@ -45,7 +45,7 @@ exports.handler = (event, context, callback) => {
       { method: 'GET', url: url, encoding: null },
       (error, response, body) => {
         if (!error && response.statusCode === 200) {
-          const contentType = type ? toContentType(type) : response.headers['content-type']
+          const contentType = type ? toContentType(type) : response.headers['content-type'] || 'image/jpeg'
           if (resize) {
             const size = {
               width: parseInt(params.w, 10),
