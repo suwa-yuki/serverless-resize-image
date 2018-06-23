@@ -56,6 +56,7 @@ exports.handler = (event, context, callback) => {
             console.log(`ext = ${ext}`)
             Sharp(body)
               .resize(size.width, size.height)
+              .rotate()
               .max()
               .withoutEnlargement()
               .toFormat(ext)
