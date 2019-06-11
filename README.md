@@ -4,6 +4,15 @@ This Application using Serverless Application Model (SAM).
 
 ## How To Deploy
 
+### Install node_modules
+
+```bash
+$ cd src
+$ docker run -it -v "$PWD":/var/task lambci/lambda:build-nodejs10.x /bin/bash
+$ npm install
+$ exit
+```
+
 ### A. API Gateway + Lambda Only
 
 ### 1. Package
