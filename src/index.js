@@ -11,9 +11,9 @@ const createResponse = (statusCode, contentType, body) => {
       'cache-control': 'max-age=31536000'
     },
     isBase64Encoded: true,
+    body: new Buffer.from(body, 'binary').toString('base64')
   }
 }
-    body: new Buffer.from(body, 'binary').toString('base64')
 
 const toContentType = (type) => {
   switch(type) {
